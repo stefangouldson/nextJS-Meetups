@@ -25,8 +25,19 @@ export async function getStaticProps() {
   return {
     props: {
       meetups: MEETUPS
-    }
+    },
+    revalidate: 10
   }
 }
+
+// export async function getServerSideProps(context){
+// const req = context.req
+// const res = context.res
+//   return {
+//     props: {
+//       meetups: MEETUPS
+//     }
+//   }
+// }
 
 export default HomePage
