@@ -1,4 +1,3 @@
-import Layout from '../components/layout/Layout'
 import MeetupList from '../components/meetups/MeetupList'
 
 const HomePage = () => {
@@ -12,9 +11,7 @@ const HomePage = () => {
     }
   ]
   return (
-    <Layout>
       <MeetupList meetups={MEETUPS} />
-    </Layout>
   )
 }
 
