@@ -1,6 +1,5 @@
 import { MongoClient } from 'mongodb'
 
-// 9CvMaN9B2LyY4RA
 async function handler(req, res){
   if(req.method === 'POST'){
     const data = req.body;
