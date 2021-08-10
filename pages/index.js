@@ -1,30 +1,37 @@
 import MeetupList from '../components/meetups/MeetupList'
-
-const MEETUPS = [
-  {
-    id: 'm1',
-    title: 'A First Meetup',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Palace_of_Westminster_from_the_dome_on_Methodist_Central_Hall_%28cropped%29.jpg/1000px-Palace_of_Westminster_from_the_dome_on_Methodist_Central_Hall_%28cropped%29.jpg',
-    address: 'London'
-  },
-  {
-    id: 'm2',
-    title: 'A Second Meetup',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Palace_of_Westminster_from_the_dome_on_Methodist_Central_Hall_%28cropped%29.jpg/1000px-Palace_of_Westminster_from_the_dome_on_Methodist_Central_Hall_%28cropped%29.jpg',
-    address: 'London'
-  },
-]
+import { MongoClient } from 'mongodb'
+import Head from 'next/head'
 
 const HomePage = (props) => {
   return (
+    <>
+      <Head>
+        <title>NextJS Meetups</title>
+        <meta name="Description" content="Browse a huge list of meetups" />
+      </Head>
       <MeetupList meetups={props.meetups} />
+    </>
   )
 }
 
 export async function getStaticProps() {
+  const client = await MongoClient.connect(process.env.MONGO_URI)
+  const db = client.db();
+
+  const meetupsCollection = db.collection('meetups');
+  const meetups = await meetupsCollection.find().toArray();
+
+  client.close();
+
   return {
     props: {
-      meetups: MEETUPS
+      meetups: meetups.map(meetup => ({
+        title: meetup.title,
+        image: meetup.image,
+        address: meetup.address,
+        id: meetup._id.toString()
+      })
+      )
     },
     revalidate: 10
   }
